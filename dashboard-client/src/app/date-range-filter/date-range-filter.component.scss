@@ -1,0 +1,69 @@
+.date-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 30%;
+  padding: 2rem;
+  background-color: #1e1e2f;
+  border-radius: 0.5rem;
+  align-items: center;
+  min-width: 461px;
+  label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    color: #ccc;
+    flex: 1;
+    min-width: 140px;
+
+    input[type="date"] {
+      margin-top: 0.25rem;
+      padding: 0.5rem;
+      border: 1px solid #555;
+      border-radius: 0.4rem;
+      background-color: #121212;
+      color: #eee;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+  }
+
+  button {
+    padding: 0.6rem 1.2rem;
+    background-color: #36a2eb;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    height: fit-content;
+    align-self: flex-end;
+
+    &:hover {
+      background-color: #2b91d8;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .date-filter {
+    width: 100%;
+    padding: 1rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .date-filter label {
+    width: 100%;
+  }
+
+  .date-filter button {
+    width: 100%;
+    align-self: stretch;
+  }
+}

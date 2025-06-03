@@ -1,1 +1,68 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <h3>Really Cool Company</h3>
+    <ul>
+      <li>Home</li>
+      <li>Sales</li>
+      <li>Products</li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header class="header">Sales Analytics Dashboard</header>
+
+    <div class="dateRange">
+      <app-date-range-filter (dateRangeSelected)="onDateRangeChange($event)">
+      </app-date-range-filter>
+    </div>
+
+    <h2 class="section-title">Key Performance Indicators</h2>
+    <!-- KPI Row -->
+    <section class="kpi-grid">
+      <app-kpi-card
+        [title]="'Total Revenue'"
+        [value]="summaryStats.totalRevenue"
+        [icon]="'💰'"
+      ></app-kpi-card>
+      <app-kpi-card
+        [title]="'Top Product'"
+        [value]="summaryStats.topProduct"
+        [icon]="'📦'"
+      ></app-kpi-card>
+      <app-kpi-card
+        [title]="'Top Region'"
+        [value]="summaryStats.topRegion"
+        [icon]="'🌎'"
+      ></app-kpi-card>
+      <app-kpi-card
+        [title]="'Total Sales'"
+        [value]="summaryStats.totalSales"
+        [icon]="'🧾'"
+      ></app-kpi-card>
+    </section>
+
+    <!-- Chart Row -->
+    <section class="chart-grid">
+      <app-chart-card
+        [title]="salesLineChart.title"
+        [chartType]="salesLineChart.type"
+        [chartData]="salesLineChart.data"
+        [chartOptions]="salesLineChart.options"
+      ></app-chart-card>
+
+      <app-chart-card
+        [title]="salesByRegionChart.title"
+        [chartType]="salesByRegionChart.type"
+        [chartData]="salesByRegionChart.data"
+        [chartOptions]="salesByRegionChart.options"
+      ></app-chart-card>
+
+      <app-chart-card
+        [title]="topProductsChart.title"
+        [chartType]="topProductsChart.type"
+        [chartData]="topProductsChart.data"
+        [chartOptions]="topProductsChart.options"
+      ></app-chart-card>
+    </section>
+  </main>
+</div>

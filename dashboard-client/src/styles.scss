@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Archivo", Arial, Helvetica, sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden; // Absolute cutoff of horizontal scroll
+  background-color: #121212; // your dark theme
+}
