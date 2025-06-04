@@ -17,52 +17,67 @@
     </div>
 
     <h2 class="section-title">Key Performance Indicators</h2>
-    <!-- KPI Row -->
-    <section class="kpi-grid">
-      <app-kpi-card
-        [title]="'Total Revenue'"
-        [value]="summaryStats.totalRevenue"
-        [icon]="'💰'"
-      ></app-kpi-card>
-      <app-kpi-card
-        [title]="'Top Product'"
-        [value]="summaryStats.topProduct"
-        [icon]="'📦'"
-      ></app-kpi-card>
-      <app-kpi-card
-        [title]="'Top Region'"
-        [value]="summaryStats.topRegion"
-        [icon]="'🌎'"
-      ></app-kpi-card>
-      <app-kpi-card
-        [title]="'Total Sales'"
-        [value]="summaryStats.totalSales"
-        [icon]="'🧾'"
-      ></app-kpi-card>
-    </section>
 
-    <!-- Chart Row -->
-    <section class="chart-grid">
-      <app-chart-card
-        [title]="salesLineChart.title"
-        [chartType]="salesLineChart.type"
-        [chartData]="salesLineChart.data"
-        [chartOptions]="salesLineChart.options"
-      ></app-chart-card>
+    <div class="error-message" *ngIf="hasError">
+      <p>Oops! Something went wrong while loading the dashboard.</p>
+    </div>
+    <!-- Loading Spinners -->
+    <div class="spinner-container" *ngIf="loading && !hasError">
+      <div class="spinner"></div>
+    </div>
+    <div *ngIf="hasError" class="error-message">
+      <p>Failed to load data. Please try again later.</p>
+    </div>
+    <div *ngIf="!loading && !hasError">
+      <app-no-data-message *ngIf="!summaryStats" />
 
-      <app-chart-card
-        [title]="salesByRegionChart.title"
-        [chartType]="salesByRegionChart.type"
-        [chartData]="salesByRegionChart.data"
-        [chartOptions]="salesByRegionChart.options"
-      ></app-chart-card>
+      <!-- KPI Row -->
+      <section class="kpi-grid">
+        <app-kpi-card
+          [title]="'Total Revenue'"
+          [value]="summaryStats?.totalRevenue || 0"
+          [icon]="'💰'"
+        ></app-kpi-card>
+        <app-kpi-card
+          [title]="'Top Product'"
+          [value]="summaryStats?.topProduct || 'N/A'"
+          [icon]="'📦'"
+        ></app-kpi-card>
+        <app-kpi-card
+          [title]="'Top Region'"
+          [value]="summaryStats?.topRegion || 'N/A'"
+          [icon]="'🌎'"
+        ></app-kpi-card>
+        <app-kpi-card
+          [title]="'Total Sales'"
+          [value]="summaryStats?.totalSales || 0"
+          [icon]="'🧾'"
+        ></app-kpi-card>
+      </section>
 
-      <app-chart-card
-        [title]="topProductsChart.title"
-        [chartType]="topProductsChart.type"
-        [chartData]="topProductsChart.data"
-        [chartOptions]="topProductsChart.options"
-      ></app-chart-card>
-    </section>
+      <!-- Chart Row -->
+      <section class="chart-grid">
+        <app-chart-card
+          [title]="salesLineChart.title"
+          [chartType]="salesLineChart.type"
+          [chartData]="salesLineChart.data"
+          [chartOptions]="salesLineChart.options"
+        ></app-chart-card>
+
+        <app-chart-card
+          [title]="salesByRegionChart.title"
+          [chartType]="salesByRegionChart.type"
+          [chartData]="salesByRegionChart.data"
+          [chartOptions]="salesByRegionChart.options"
+        ></app-chart-card>
+
+        <app-chart-card
+          [title]="topProductsChart.title"
+          [chartType]="topProductsChart.type"
+          [chartData]="topProductsChart.data"
+          [chartOptions]="topProductsChart.options"
+        ></app-chart-card>
+      </section>
+    </div>
   </main>
 </div>

@@ -2,97 +2,73 @@ import { Component } from '@angular/core';
 import { KpiCardComponent } from '../kpi-card/kpi-card.component';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { DateRangeFilterComponent } from '../date-range-filter/date-range-filter.component';
+import { OnInit } from '@angular/core';
+import { DashboardDataService } from '../services/dashboard-data.service';
+import { KpiData } from '../services/dashboard-data.service';
+import { catchError, forkJoin } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { NoDataMessageComponent } from '../no-data-message/no-data-message.component';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [KpiCardComponent, ChartCardComponent, DateRangeFilterComponent],
+  imports: [
+    KpiCardComponent,
+    ChartCardComponent,
+    DateRangeFilterComponent,
+    CommonModule,
+    NoDataMessageComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent {
+  loading: boolean = false;
+  hasError: boolean = false;
+
+  constructor(private dashboardDataService: DashboardDataService) {} //dependency injection (similar to java tbh)
+
+  // properties to store fetched values
+  summaryStats: KpiData | null = null;
+  salesLineChart: any = null;
+  salesByRegionChart: any = null;
+  topProductsChart: any = null;
+
   //date range filter logic
   onDateRangeChange(range: { start: string; end: string }) {
-    console.log('Date range selected:', range);
+    this.fetchDashboardData(range.start, range.end);
     // Later: this.salesService.getSales(range.start, range.end).subscribe(...)
   }
 
-  summaryStats = {
-    totalRevenue: 123456,
-    topProduct: 'Headphones',
-    topRegion: 'North America',
-    totalSales: 2389,
-  };
-  salesLineChart = {
-    title: 'Sales Over Time',
-    type: 'line' as const,
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-      datasets: [
-        {
-          data: [12000, 15000, 18000, 22000],
-          label: 'Monthly Sales',
-          fill: true,
-          tension: 0.4,
-          borderColor: '#36A2EB',
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: true,
-        },
-      },
-    },
-  };
-  salesByRegionChart = {
-    title: 'Sales by Region',
-    type: 'pie' as const,
-    data: {
-      labels: ['North America', 'Europe', 'Asia', 'South America'],
-      datasets: [
-        {
-          data: [50000, 30000, 20000, 15000],
-          backgroundColor: ['#36A2EB', '#FFCE56', '#FF6384', '#4BC0C0'],
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'bottom' as const,
-        },
-      },
-    },
-  };
-  topProductsChart = {
-    title: 'Top-Selling Products',
-    type: 'bar' as const,
-    data: {
-      labels: ['Headphones', 'Keyboard', 'Mouse', 'Monitor'],
-      datasets: [
-        {
-          label: 'Units Sold',
-          data: [340, 280, 220, 150],
-          backgroundColor: '#36A2EB',
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  };
+  ngOnInit() {
+    const today = new Date().toISOString().split('T')[0];
+    this.fetchDashboardData(today, today); //single day view default
+  }
+
+  fetchDashboardData(start: string, end: string) {
+    this.loading = true; //loading while fetching data, show spinner
+    this.hasError = false;
+
+    const kpi$ = this.dashboardDataService.getKpisByDateRange(start, end); //to hold observable
+    const charts$ = this.dashboardDataService.getChartsByDateRange(start, end); //to hold observable
+
+    forkJoin([kpi$, charts$]).subscribe(([kpiData, chartData]) => {
+      if (!kpiData || !chartData) {
+        this.hasError = true;
+        this.loading = false;
+        return;
+      }
+      //forkJoin takes multiple observables and waits for them to complete (when both KPI and chart data ready, show both results in single callback)
+      this.summaryStats = kpiData;
+      this.salesLineChart = chartData.lineChart;
+      this.salesByRegionChart = chartData.pieChart;
+      this.topProductsChart = chartData.barChart;
+
+      // simulate empty state
+      // this.summaryStats = null as any; // or undefined
+      // this.salesLineChart = null;
+      // this.salesByRegionChart = null;
+      // this.topProductsChart = null;
+      this.loading = false; // done loading after both are finished
+    });
+  }
 }
