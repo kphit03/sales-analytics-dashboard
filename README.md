@@ -1,67 +1,29 @@
+## 📦 Development Environment
 
-## API Contract
+To ensure consistent development and avoid dependency conflicts, use the following versions when working on this project:
 
-### `GET /api/sales`
-Returns a list of all sales records.
+### 🔧 System Requirements
 
-**Optional Query Parameters:**
-- `start` – Start date (e.g., `2024-01-01`)
-- `end` – End date (e.g., `2024-01-31`)
+- **Node.js**: `v22.16.0`
+- **npm**: `11.4.1`
 
-**Example Request:**
-```
-GET /api/sales?start=2024-01-01&end=2024-01-31
-```
+### 🧱 Angular CLI & Dependencies
 
-**Example Response:**
-```json
-[
-  {
-    "id": 1,
-    "product": "Wireless Mouse",
-    "category": "Electronics",
-    "region": "North America",
-    "amount": 49.99,
-    "date": "2024-01-15"
-  }
-]
-```
+| Package                          | Version     |
+|----------------------------------|-------------|
+| @angular-devkit/architect        | 0.1902.14   |
+| @angular-devkit/build-angular    | 19.2.14     |
+| @angular-devkit/core             | 19.2.14     |
+| @angular-devkit/schematics       | 19.2.14     |
+| @schematics/angular              | 19.2.14     |
+| rxjs                             | 7.8.2       |
+| typescript                       | 5.7.3       |
+| zone.js                          | 0.15.1      |
 
----
+### 📌 Setup Instructions
 
-### `GET /api/summary`
-Returns KPI summary metrics.
-
-**Example Response:**
-```json
-{
-  "totalRevenue": 235000.50,
-  "topProduct": "Bluetooth Headphones",
-  "topRegion": "North America",
-  "totalSales": 1048
-}
-```
-
----
-
-### `GET /api/products`
-Returns a list of products and their categories.
-
-**Example Response:**
-```json
-[
-  {
-    "id": 1,
-    "name": "Wireless Mouse",
-    "category": "Electronics"
-  }
-]
-```
-
----
-
-### `GET /api/sales/export`
-Returns a CSV export of filtered sales data.
-
-**Optional Query Parameters:** Same as `/api/sales`  
-**Response:** CSV file for download
+1. Clone the repository
+2. Use the correct Node version (see below)
+3. Install dependencies with:
+   ```bash
+   npm install
